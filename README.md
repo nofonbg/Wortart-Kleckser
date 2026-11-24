@@ -4,6 +4,7 @@
 [![Live-Demo](https://img.shields.io/badge/Live--Demo-nofonbg.github.io-2563eb?logo=githubpages&logoColor=white)](https://nofonbg.github.io/Wortart-Kleckser/)
 
 Ein kinderfreundliches Shooter-Spiel: Kleckse mit deinem Füller die herabsinkenden Wörter ab – aber nur mit der richtigen Wortart!
+todo: Level ohne farbige Differenzierung der Wortarten, weitere Wortarten, größerer Wortschatz
 
 ![Wortart-Kleckser](docs/wortart-kleckser.png)
 

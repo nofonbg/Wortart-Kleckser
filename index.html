@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stift-Schuss – Füller-Shooter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game">
+    <div id="hud">
+      <div class="hud-item">PUNKTE <span id="score">0</span></div>
+      <div class="hud-item">REKORD <span id="high">0</span></div>
+      <button id="restartBtn" class="hud-btn" type="button">↻ Auswahl</button>
+    </div>
+
+    <div id="timerDisc">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="timer-bg" cx="50" cy="50" r="42"></circle>
+        <circle class="timer-arc" cx="50" cy="50" r="42"></circle>
+      </svg>
+      <span id="timerText">60</span>
+    </div>
+
+    <div id="words"></div>
+    <div id="projectiles"></div>
+    <div id="floaters"></div>
+    <div id="pen"><span class="pen-star">⭐</span></div>
+
+    <div id="endScreen" class="hidden">
+      <div class="end-score"><span id="endScore">0</span><span class="end-unit">Punkte</span></div>
+      <button class="end-restart" id="endRestart" type="button">Neustart</button>
+    </div>
+  </div>
+
+  <div id="startScreen">
+    <div class="card">
+      <h1><span class="pen-emoji">🖋️</span> Wortart-Kleckser</h1>
+      <p class="subtitle">
+        Kleckse mit deinem Füller die herabsinkenden Wörter ab –<br />
+        aber nur mit der richtigen Wortart!
+      </p>
+
+      <div class="desc">
+        <div class="desc-row"><span class="key">Maus</span><span>Stift bewegen</span></div>
+        <div class="desc-row"><span class="key">WASD</span><span>/</span><span class="key">Pfeiltasten</span><span>Stift bewegen</span></div>
+        <div class="desc-row"><span class="key">Linke Maustaste</span><span>/</span><span class="key">Leertaste</span><span>Tintenstrahl abfeuern</span></div>
+        <div class="desc-row"><span class="key">Treffer</span><span>+10 Punkte</span></div>
+        <div class="desc-row"><span class="key">Falsche Wortart</span><span>−10 Punkte</span></div>
+        <div class="desc-row"><span class="key">Zeit</span><span>60 Sekunden pro Runde</span></div>
+      </div>
+
+      <div class="label">Wähle deine Zielwortart:</div>
+      <div id="typeOptions">
+        <button class="type-option selected" data-type="noun" type="button">Nomen</button>
+        <button class="type-option" data-type="article" type="button">Artikel</button>
+        <button class="type-option" data-type="verb" type="button">Verb</button>
+      </div>
+      <button id="startBtn" class="start-btn" type="button">Start</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

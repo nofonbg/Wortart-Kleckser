@@ -28,7 +28,7 @@ open index.html          # macOS – oder die Datei in jeden Browser ziehen
 Alle Ressourcen liegen lokal, es werden keine externen CDN-Aufrufe gemacht.
 
 ## Lizenz
-**CC0 CrayonLibre-Regular.woff**: https://ggbot.itch.io/crayon-libre-font
+**CC0 CrayonLibre-Regular.woff**: https://ggbot.itch.io/crayon-libre-font 
 **CC BY-NC-SA 4.0 – Namensnennung, nicht-kommerziell, gleiche Lizenz**
 (vollständiger Text der Lizenz in [`LICENSE`](LICENSE),
 Übersicht auf deutsch: <https://creativecommons.org/licenses/by-nc-sa/4.0/de>)

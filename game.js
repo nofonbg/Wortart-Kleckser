@@ -17,7 +17,10 @@ const restartBtn = document.getElementById('restartBtn');
 const endScreenEl = document.getElementById('endScreen');
 const endScoreEl = document.getElementById('endScore');
 const endRestartBtn = document.getElementById('endRestart');
-const typeOptions = Array.from(document.querySelectorAll('.type-option'));
+const loadErrorEl = document.getElementById('loadError');
+const difficultyInput = document.getElementById('difficulty');
+const difficultyDesc = document.getElementById('difficultyDesc');
+const flagButtons = Array.from(document.querySelectorAll('.flag-btn'));
 
 const PEN_W = 76;
 const PEN_H = 132;
@@ -27,16 +30,119 @@ const PEN_SPEED = 420; // px/s (Tastatur)
 const GAME_DURATION = 60; // Sekunden
 const ARC_RADIUS = 42;
 const ARC_CIRCUMFERENCE = 2 * Math.PI * ARC_RADIUS; // ≈ 263.9
-const POINTS = { noun: 10, article: 10, verb: 10 }; // alle Wortarten gleich
 const PENALTY = 10;
 const HIGH_KEY = 'stift-schuss-high';
 
-const ALL_TYPES = ['noun', 'article', 'verb'];
-const TYPE_WORDS = {
-  noun: ['Sturm', 'Stern', 'Himmel', 'Meer', 'Berg', 'Weg', 'Baum', 'Donner', 'Mond', 'Sonne', 'Wolke', 'Fels', 'Raum', 'Licht'],
-  article: ['DER', 'DIE', 'DAS', 'EIN', 'EINE'],
-  verb: ['läuft', 'singt', 'spricht', 'macht', 'fällt', 'trägt', 'schläft', 'hofft', 'wagt', 'liest', 'lacht', 'baut', 'trinkt', 'tanzt'],
-};
+/* ================= Wort-Daten (words.json) ==================== */
+
+const WORDS_URL = './words.json';
+const WORDS_LANG = 'de'; // Standard-Sprache (per Spracheinstellung wählbar)
+
+/* Schwierigkeitsgrade: Index 0 = leicht, 1 = mittel, 2 = schwer */
+const LETTER_COLORS = ['#e03131', '#1971c2', '#2f9e44', '#e8590c', '#ae3ec9', '#0b7285', '#c2255c', '#5c940d'];
+
+const DIFFICULTY_DESCS = [
+  'Wörter werden nach Farbe und Groß- und Kleinschreibung unterschieden',
+  'Wörter sind bunt und werden nur nach Groß- und Kleinschreibung unterschieden',
+  'Alle Wörter sind bunt und werden klein geschrieben (hohe Fallgeschwindigkeit)',
+];
+
+const DIFFICULTY = [
+  { name: 'leicht', spawnInterval: 1900, startSpeed: 45, maxSpeed: 140, minInterval: 600, intervalRamp: 25, speedRamp: 0.20 },
+  { name: 'mittel', spawnInterval: 1500, startSpeed: 60, maxSpeed: 170, minInterval: 450, intervalRamp: 35, speedRamp: 0.24 },
+  { name: 'schwer', spawnInterval: 1050, startSpeed: 85, maxSpeed: 220, minInterval: 380, intervalRamp: 45, speedRamp: 0.30 },
+];
+
+let ALL_TYPES = [];
+let TYPE_WORDS = {};
+let TYPE_POINTS = {};
+let WORDS_READY = false;
+
+function renderTypeOptions(types) {
+  const container = document.getElementById('typeOptions');
+  container.innerHTML = '';
+  for (let i = 0; i < types.length; i++) {
+    const t = types[i];
+    const btn = document.createElement('button');
+    btn.className = 'type-option' + (i === 0 ? ' selected' : '');
+    btn.dataset.type = t.id;
+    btn.type = 'button';
+    btn.textContent = t.label;
+    btn.addEventListener('click', () => {
+      // nur eine Wortart darf ausgewählt sein
+      for (const other of container.querySelectorAll('.type-option')) {
+        other.classList.toggle('selected', other === btn);
+      }
+    });
+    container.appendChild(btn);
+  }
+}
+
+let currentLang = WORDS_LANG;
+let AVAILABLE_LANGS = [];
+
+function updateLanguageFlags(langs) {
+  for (const btn of flagButtons) {
+    const available = langs.includes(btn.dataset.lang);
+    btn.disabled = !available;
+    btn.classList.toggle('disabled', !available);
+  }
+}
+
+async function loadWords(lang) {
+  const langKey = lang || WORDS_LANG;
+  const res = await fetch(WORDS_URL);
+  if (!res.ok) throw new Error('words.json nicht ladbar (HTTP ' + res.status + ')');
+  const data = await res.json();
+  AVAILABLE_LANGS = Object.keys(data.languages);
+  updateLanguageFlags(AVAILABLE_LANGS);
+  const langData = data.languages[langKey];
+  if (!langData) throw new Error('Sprache "' + langKey + '" nicht gefunden');
+
+  ALL_TYPES = langData.types.map((t) => t.id);
+  TYPE_WORDS = {};
+  TYPE_POINTS = {};
+  for (const t of langData.types) {
+    TYPE_WORDS[t.id] = t.words;
+    TYPE_POINTS[t.id] = typeof t.points === 'number' ? t.points : 10;
+  }
+  renderTypeOptions(langData.types);
+  currentLang = langKey;
+  WORDS_READY = true;
+}
+
+function setLanguage(lang) {
+  if (lang === currentLang && WORDS_READY) return; // keine Änderung nötig
+  flagButtons.forEach((b) => b.classList.toggle('selected', b.dataset.lang === lang));
+  loadErrorEl.classList.add('hidden');
+  WORDS_READY = false;
+  loadWords(lang)
+    .then(() => {
+      loadErrorEl.classList.add('hidden');
+    })
+    .catch((err) => {
+      if (err && err.message && err.message.indexOf('nicht gefunden') !== -1) {
+        document.getElementById('typeOptions').innerHTML = '';
+        loadErrorEl.textContent = 'Sprache wird noch nicht unterstützt. Aktuell verfügbar: Deutsch (de).';
+        loadErrorEl.classList.remove('hidden');
+      } else {
+        showLoadError(err);
+      }
+    });
+}
+
+function showLoadError(err) {
+  const el = loadErrorEl;
+  if (!el) return;
+  if (location.protocol === 'file:') {
+    el.textContent =
+      'Wortliste konnte ohne Webserver nicht geladen werden (file://). Bitte im Projektordner einen Webserver starten: python3 -m http.server 8642 – dann http://localhost:8642/index.html öffnen.';
+  } else {
+    el.textContent =
+      'Wortliste konnte nicht geladen werden: ' + (err && err.message ? err.message : 'unbekannt') + '. Bitte prüfe, ob words.json vorhanden ist und über einen Webserver geladen wird.';
+  }
+  el.classList.remove('hidden');
+}
 
 const state = {
   running: false,
@@ -44,6 +150,7 @@ const state = {
   score: 0,
   high: Number(localStorage.getItem(HIGH_KEY)) || 0,
   words: [],
+  difficulty: 0,
   spawnTimer: null,
   spawnInterval: 1500,
   speed: 60,
@@ -132,11 +239,23 @@ function spawnWord() {
   if (!state.running) return;
 
   const type = ALL_TYPES[Math.floor(Math.random() * ALL_TYPES.length)];
-  const text = TYPE_WORDS[type][Math.floor(Math.random() * TYPE_WORDS[type].length)];
+  const rawText = TYPE_WORDS[type][Math.floor(Math.random() * TYPE_WORDS[type].length)];
+  // schwer: alle Wörter klein – die Schreibweise gibt ebenfalls keinen Hinweis
+  const text = state.difficulty >= 2 ? rawText.toLowerCase() : rawText;
 
   const el = document.createElement('div');
   el.className = 'word type-' + type;
-  el.textContent = text;
+  if (state.difficulty >= 1) {
+    // mittel & schwer: bunte Buchstaben – keine einheitliche Farbe, keine Wortart-Erkennung
+    for (const ch of text) {
+      const span = document.createElement('span');
+      span.textContent = ch;
+      span.style.color = LETTER_COLORS[Math.floor(Math.random() * LETTER_COLORS.length)];
+      el.appendChild(span);
+    }
+  } else {
+    el.textContent = text;
+  }
   wordsEl.appendChild(el);
 
   const w = {
@@ -154,9 +273,10 @@ function spawnWord() {
   el.style.top = w.y + 'px';
   state.words.push(w);
 
+  const diff = DIFFICULTY[state.difficulty];
   state.spawnTimer = setTimeout(spawnWord, state.spawnInterval);
-  state.spawnInterval = Math.max(450, state.spawnInterval - 35);
-  state.speed = Math.min(170, 60 + (1500 - state.spawnInterval) * 0.24);
+  state.spawnInterval = Math.max(diff.minInterval, state.spawnInterval - diff.intervalRamp);
+  state.speed = Math.min(diff.maxSpeed, diff.startSpeed + (diff.spawnInterval - state.spawnInterval) * diff.speedRamp);
 }
 
 /* ================= Zeitscheibe ================= */
@@ -273,8 +393,9 @@ function hit(word) {
   splat(cx, cy, size);
 
   if (state.allowed.has(word.type)) {
-    state.score += POINTS[word.type];
-    floatText('+' + POINTS[word.type], cx, word.y - 8, '#7CFFB2');
+    const pts = TYPE_POINTS[word.type] ?? 10;
+    state.score += pts;
+    floatText('+' + pts, cx, word.y - 8, '#7CFFB2');
     beep(520, 0.09, 'sine', 0.2);
   } else {
     state.score = Math.max(0, state.score - PENALTY);
@@ -371,8 +492,9 @@ function startGame() {
   wordsEl.innerHTML = '';
   projectilesEl.innerHTML = '';
   floatersEl.innerHTML = '';
-  state.spawnInterval = 1500;
-  state.speed = 60;
+  const diff = DIFFICULTY[state.difficulty];
+  state.spawnInterval = diff.spawnInterval;
+  state.speed = diff.startSpeed;
   state.startTime = performance.now();
   updateTimer(GAME_DURATION);
 
@@ -392,13 +514,21 @@ function startGame() {
 
 function selectedTypes() {
   const set = new Set();
-  for (const btn of typeOptions) {
+  for (const btn of document.querySelectorAll('#typeOptions .type-option')) {
     if (btn.classList.contains('selected')) set.add(btn.dataset.type);
   }
   return set;
 }
 
-startBtn.addEventListener('click', () => {
+startBtn.addEventListener('click', async () => {
+  if (!WORDS_READY) {
+    try {
+      await loadWords(currentLang);
+    } catch (e) {
+      showLoadError(e);
+      return;
+    }
+  }
   const sel = selectedTypes();
   if (sel.size !== 1) return; // genau eine Wortart
   state.allowed = sel;
@@ -407,15 +537,6 @@ startBtn.addEventListener('click', () => {
 
 restartBtn.addEventListener('click', () => backToSelection());
 endRestartBtn.addEventListener('click', () => backToSelection());
-
-for (const btn of typeOptions) {
-  btn.addEventListener('click', () => {
-    // nur eine Wortart darf ausgewählt sein
-    for (const other of typeOptions) {
-      other.classList.toggle('selected', other === btn);
-    }
-  });
-}
 
 /* ================= Eingabe ================= */
 
@@ -454,7 +575,28 @@ window.addEventListener('keyup', (e) => {
 
 window.addEventListener('blur', () => state.keys.clear());
 
+/* ================= Schwierigkeit & Sprache ================= */
+
+function setDifficulty(idx) {
+  state.difficulty = idx;
+  difficultyInput.value = String(idx);
+  gameEl.dataset.difficulty = DIFFICULTY[idx].name;
+  document.querySelectorAll('.diff-name').forEach((el) => {
+    el.classList.toggle('active', Number(el.dataset.diff) === idx);
+  });
+  difficultyDesc.textContent = DIFFICULTY_DESCS[idx];
+}
+
+difficultyInput.addEventListener('input', () => setDifficulty(Number(difficultyInput.value)));
+
+flagButtons.forEach((btn) => {
+  btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+});
+
 /* ================= Init ================= */
 
+setDifficulty(0);
+flagButtons.forEach((b) => b.classList.toggle('selected', b.dataset.lang === WORDS_LANG));
+loadWords(WORDS_LANG).catch(showLoadError);
 resetPen();
 updateScore();

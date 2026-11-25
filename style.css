@@ -79,6 +79,11 @@ button {
   text-shadow: 0 0 18px rgba(199, 125, 255, 0.55);
 }
 
+.type-pronoun {
+  color: #ffa94d;
+  text-shadow: 0 0 18px rgba(255, 169, 77, 0.55);
+}
+
 .type-verb {
   color: #4cc9f0;
   text-shadow: 0 0 18px rgba(76, 201, 240, 0.55);
@@ -162,8 +167,8 @@ button {
   height: 200px;
   margin: -100px 0 0 -100px;
   background: #1c3fae;
-  -webkit-mask-image: url("klecks.png");
-  mask-image: url("klecks.png");
+  -webkit-mask-image: url("klecks.svg");
+  mask-image: url("klecks.svg");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -502,4 +507,168 @@ button {
 
 .end-restart:hover {
   transform: scale(1.05);
+}
+
+/* ---------- Ladefehler ---------- */
+.load-error {
+  color: #ff6b81;
+  font-weight: 700;
+  margin: 10px 0 0;
+  font-size: 15px;
+}
+
+/* ---------- Schwierigkeits-Slider ---------- */
+.difficulty {
+  margin: 14px 0 6px;
+}
+
+.difficulty-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.difficulty-head label {
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #9fb0d8;
+  font-weight: 700;
+}
+
+.difficulty-names {
+  display: flex;
+  gap: 14px;
+}
+
+.diff-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #6b7aa8;
+  transition: color 0.15s ease;
+}
+
+.diff-name.active {
+  color: #e7a259;
+  text-shadow: 0 0 12px rgba(231, 162, 89, 0.45);
+}
+
+#difficulty {
+  width: 100%;
+  accent-color: #e7a259;
+  cursor: pointer;
+}
+
+.difficulty-desc {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #9fb0d8;
+  text-align: center;
+  min-height: 36px;
+}
+
+/* ---------- Sprachflags & Sprach-Auswahl ---------- */
+.lang-flags {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 44px 0 14px;
+}
+
+.flag-btn {
+  position: relative;
+  background: rgba(20, 30, 60, 0.6);
+  border: 2px solid rgba(120, 150, 255, 0.25);
+  border-radius: 12px;
+  width: 52px;
+  height: 44px;
+  font-size: 26px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.flag-btn img {
+  height: 34px;
+  width: auto;
+}
+
+.flag-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(140, 165, 255, 0.6);
+}
+
+/* sofortiger Tooltip beim Hovern (kein nativer title-Delay) */
+.flag-btn::after {
+  z-index: 50;
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #05070f;
+  border: 1px solid rgba(120, 150, 255, 0.45);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.flag-btn:hover::after,
+.flag-btn:focus-visible::after {
+  opacity: 1;
+}
+
+.flag-btn.selected {
+  border-color: #e7a259;
+  box-shadow: 0 0 16px rgba(231, 162, 89, 0.5);
+  transform: scale(1.08);
+}
+
+.flag-btn.disabled {
+  filter: grayscale(1);
+  cursor: not-allowed;
+}
+
+.flag-btn.disabled:hover {
+  transform: none;
+  border-color: rgba(120, 150, 255, 0.25);
+  box-shadow: none;
+}
+
+/* ---------- Schwierigkeit „mittel" & „schwer": weiße Tafel, schwarze Linien ---------- */
+#game[data-difficulty="mittel"], #game[data-difficulty="schwer"] {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 38px,
+      rgba(0, 0, 0, 0.25) 38px,
+      rgba(0, 0, 0, 0.25) 40px
+    ),
+    linear-gradient(160deg, #ffffff 0%, #f6f3ec 60%, #ede9df 100%);
+}
+
+#game[data-difficulty="mittel"]::after, #game[data-difficulty="schwer"]::after {
+  border-color: rgba(0, 0, 0, 0.35);
+}
+
+/* bunte Buchstaben: Glow der Wortarten abschalten, Farbe kommt vom Inline-Style */
+#game[data-difficulty="mittel"] .word, #game[data-difficulty="schwer"] .word {
+  text-shadow: none;
+}
+
+/* Punktezahlen auf weißer Tafel lesbar halten */
+#game[data-difficulty="mittel"] .floater, #game[data-difficulty="schwer"] .floater {
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
 }

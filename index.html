@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="game">
+  <div id="game" data-difficulty="leicht">
     <div id="hud">
       <div class="hud-item">PUNKTE <span id="score">0</span></div>
       <div class="hud-item">REKORD <span id="high">0</span></div>
@@ -51,11 +51,30 @@
       </div>
 
       <div class="label">Wähle deine Zielwortart:</div>
-      <div id="typeOptions">
-        <button class="type-option selected" data-type="noun" type="button">Nomen</button>
-        <button class="type-option" data-type="article" type="button">Artikel</button>
-        <button class="type-option" data-type="verb" type="button">Verb</button>
+      <div id="typeOptions"></div>
+
+      <div class="difficulty">
+        <div class="difficulty-head">
+          <label for="difficulty">Schwierigkeit</label>
+          <div class="difficulty-names">
+            <span class="diff-name active" data-diff="0">leicht</span>
+            <span class="diff-name" data-diff="1">mittel</span>
+            <span class="diff-name" data-diff="2">schwer</span>
+          </div>
+        </div>
+        <input type="range" id="difficulty" min="0" max="2" step="1" value="0" />
+        <p id="difficultyDesc" class="difficulty-desc">Wörter werden nach Farbe und Groß- und Kleinschreibung unterschieden</p>
       </div>
+
+      <div class="lang-flags" role="group" aria-label="Sprache wählen">
+        <button class="flag-btn selected" data-lang="de" type="button" data-tooltip="Deutsch" aria-label="Deutsch">🇩🇪</button>
+        <button class="flag-btn" data-lang="en" type="button" data-tooltip="English" aria-label="English">🇬🇧</button>
+        <button class="flag-btn" data-lang="la" type="button" data-tooltip="lingua latina" aria-label="lingua latina"><img src="spqr.svg" alt="" /></button>
+        <button class="flag-btn" data-lang="fr" type="button" data-tooltip="Français" aria-label="Français">🇫🇷</button>
+        <button class="flag-btn" data-lang="es" type="button" data-tooltip="Español" aria-label="Español">🇪🇸</button>
+      </div>
+
+      <p id="loadError" class="load-error hidden"></p>
       <button id="startBtn" class="start-btn" type="button">Start</button>
     </div>
   </div>

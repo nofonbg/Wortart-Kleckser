@@ -3,10 +3,11 @@
 [![Lizenz: CC BY-NC-SA 4.0](https://img.shields.io/badge/Lizenz-CC%20BY--NC--SA%204.0-lightgrey?logo=creativecommons&logoColor=black)](LICENSE)
 [![Live-Demo](https://img.shields.io/badge/Live--Demo-nofonbg.github.io-2563eb?logo=githubpages&logoColor=white)](https://nofonbg.github.io/Wortart-Kleckser/)
 
-Ein kinderfreundliches Shooter-Spiel: Kleckse mit deinem Füller die herabsinkenden Wörter ab – aber nur mit der richtigen Wortart!  
-todo: Level ohne farbige Differenzierung der Wortarten, weitere Wortarten, größerer Wortschatz, weitere Sprachen
+**Kleckse mit deinem Füller die herabsinkenden Wörter ab – aber nur mit der richtigen Wortart!**  
+Drei Schwierigkeits-Level (leicht, mittel, schwer) und fünf Sprachen (Deutsch, English, Français, Español, Latein).  
+todo: weitere Wortarten, größerer Wortschatz, weitere Sprachen
 
-![Wortart-Kleckser](docs/wortart-kleckser.png)
+![Wortart-Kleckser](docs/wortart-kleckser.jpg)
 
 Öffne `index.html` im Browser (oder nutze die Live-Demo oben).
 
@@ -15,19 +16,38 @@ todo: Level ohne farbige Differenzierung der Wortarten, weitere Wortarten, grö�
 - **Punkte**: Treffer +10, falsche Wortart −10 (Score-Floor 0)
 - **Ziel**: 60 Sekunden überleben – das Zielwort erreicht die untere Kante und das Spiel endet
 
-## Wortarten
+## Schwierigkeits-Level
 
-Wähle vor dem Start genau eine Zielwortart: **Nomen**, **Artikel** oder **Verb**. Nur Wörter dieser Art bringen Punkte.
+Vor dem Start wählst du den Schwierigkeitsgrad per Slider. Jedes Level ändert, wie die Wörter aussehen und fallen:
+
+- **leicht** 🟢 – Wörter werden nach Farbe und Groß- und Kleinschreibung unterschieden (langsam fallend)
+- **mittel** 🟡 – Wörter sind bunt, aber nur Groß- und Kleinschreibung unterscheidet die Wortart (mittelschnell)
+- **schwer** 🔴 – alle Wörter sind bunt und werden klein geschrieben, dazu hohe Fallgeschwindigkeit (kaum mehr Rückschluss auf die Wortart)
+
+## Sprachen & Wortarten
+
+Vor dem Start wählst du per Flaggen-Auswahl eine der fünf Sprachen und anschließend genau eine Zielwortart dieser Sprache:
+
+| Sprache | Flagge | Wortarten |
+|---|---|---|
+| Deutsch | <img src="docs/flag-de.svg" alt="Deutsch" height="28" /> | Nomen, Artikel, Verb |
+| English | <img src="docs/flag-en.svg" alt="English" height="28" /> | Noun, Verb, Pronoun |
+| Français | <img src="docs/flag-fr.svg" alt="Français" height="28" /> | Nom, Verbe, Pronom |
+| Español | <img src="docs/flag-es.svg" alt="Español" height="28" /> | Sustantivo, Verbo, Pronombre |
+| Latein | <img src="spqr.svg" alt="Latein" height="28" /> | Substantiv, Pronomen, Verbum (ohne Artikel) |
+
+Nur Wörter der gewählten Wortart bringen Punkte. Nicht verfügbare Sprachen sind ausgegraut (aktuell sind alle fünf verfügbar).
 
 ## Starten
 
-```bash
-open index.html          # macOS – oder die Datei in jeden Browser ziehen
-```
+Da die Wortliste `words.json` mit `fetch()` relativ geladen wird, muss die Seite über einen Webserver bereitgestellt werden (öffnen per `file://` wird von Browsern blockiert):
+
 
 Alle Ressourcen liegen lokal, es werden keine externen CDN-Aufrufe gemacht.
 
 ## Lizenz
+**Römische Flagge: <a href="https://commons.wikimedia.org/wiki/File:Vexilloid_of_the_Roman_Empire.svg">Ssolbergj</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons**
+
 **CC0 CrayonLibre-Regular.woff**: https://ggbot.itch.io/crayon-libre-font   
 
 **CC BY-NC-SA 4.0 – Namensnennung, nicht-kommerziell, gleiche Lizenz**

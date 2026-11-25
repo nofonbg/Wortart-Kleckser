@@ -3,7 +3,7 @@
 [![Lizenz: CC BY-NC-SA 4.0](https://img.shields.io/badge/Lizenz-CC%20BY--NC--SA%204.0-lightgrey?logo=creativecommons&logoColor=black)](LICENSE)
 [![Live-Demo](https://img.shields.io/badge/Live--Demo-nofonbg.github.io-2563eb?logo=githubpages&logoColor=white)](https://nofonbg.github.io/Wortart-Kleckser/)
 
-**Kleckse mit deinem Füller die herabsinkenden Wörter ab – aber nur mit der richtigen Wortart!**  
+**Kleckse mit deinem Füller die herabsinkenden Wörter weg – aber nur mit der richtigen Wortart!**  
 Drei Schwierigkeits-Level (leicht, mittel, schwer) und fünf Sprachen (Deutsch, English, Français, Español, Latein).  
 todo: weitere Wortarten, größerer Wortschatz, weitere Sprachen
 

@@ -46,8 +46,6 @@ Da die Wortliste `words.json` mit `fetch()` relativ geladen wird, muss die Seite
 Alle Ressourcen liegen lokal, es werden keine externen CDN-Aufrufe gemacht.
 
 ## Lizenz
-**Römische Flagge: <a href="https://commons.wikimedia.org/wiki/File:Vexilloid_of_the_Roman_Empire.svg">Ssolbergj</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons**
-
 **CC0 CrayonLibre-Regular.woff**: https://ggbot.itch.io/crayon-libre-font   
 
 **CC BY-NC-SA 4.0 – Namensnennung, nicht-kommerziell, gleiche Lizenz**

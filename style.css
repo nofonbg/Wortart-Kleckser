@@ -93,52 +93,11 @@ button {
 #pen {
   position: absolute;
   width: 76px;
-  height: 132px;
-  border-radius: 38px 38px 18px 18px;
-  background:
-    radial-gradient(circle at 35% 26%, rgba(255, 255, 255, 0.65), transparent 46%),
-    radial-gradient(circle, rgba(255, 255, 255, 0.55) 7px, transparent 8px),
-    linear-gradient(160deg, #ffd6e0 0%, #ffb3c8 55%, #ff9fb8 100%);
-  background-size: 100% 100%, 24px 24px, 100% 100%;
-  box-shadow:
-    0 0 18px rgba(255, 170, 200, 0.55),
-    inset 0 0 0 3px rgba(255, 255, 255, 0.55);
+  height: 172px;
+  background: url("fueller.svg") center top / contain no-repeat;
+  filter: drop-shadow(0 0 14px rgba(255, 170, 200, 0.45));
   z-index: 40;
   pointer-events: none;
-}
-
-.pen-star {
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 36px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-}
-
-/* Federspitze (Nib) */
-#pen::before {
-  content: "";
-  position: absolute;
-  top: -34px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(#f0d78c, #b98f3a);
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-}
-
-/* Schlitz in der Federspitze */
-#pen::after {
-  content: "";
-  position: absolute;
-  top: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3px;
-  height: 24px;
-  background: #4a3810;
 }
 
 /* Tintenstrahl (Projektil) */

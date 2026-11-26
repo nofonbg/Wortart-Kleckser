@@ -23,8 +23,8 @@ const difficultyDesc = document.getElementById('difficultyDesc');
 const flagButtons = Array.from(document.querySelectorAll('.flag-btn'));
 
 const PEN_W = 76;
-const PEN_H = 132;
-const PEN_TIP = 34; // Federspitze über dem Körper
+const PEN_H = 172; // SVG-Aspekt 156.46 x 353.12 (ca. 1:2.257)
+const PEN_TIP = 0; // Federspitze ist Teil des SVG (oben)
 const PEN_SPEED = 420; // px/s (Tastatur)
 
 const GAME_DURATION = 60; // Sekunden
